@@ -15,6 +15,6 @@ trf4php is a simple interface. You can use it in your code for transaction handl
 Features
 --------
 
-Currently there is one binding implementation: [trf4php/trf4php-doctrine](https://github.com/szjani/trf4php-doctrine)
+Currently there is one binding implementation: [trf4php-doctrine](https://github.com/szjani/trf4php-doctrine)
 
 Feel free to implement a binding for your preferred database handling framework.
