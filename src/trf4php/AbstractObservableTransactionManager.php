@@ -66,6 +66,11 @@ abstract class AbstractObservableTransactionManager implements ObservableTransac
         $this->observers->detach($observer);
     }
 
+    public function contains(TransactionManagerObserver $observer)
+    {
+        return $this->observers->contains($observer);
+    }
+
     final protected function notify($event)
     {
         foreach ($this->observers as $observer) {

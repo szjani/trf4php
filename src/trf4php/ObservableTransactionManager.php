@@ -23,6 +23,8 @@
 
 namespace trf4php;
 
+use trf4php\TransactionManagerObserver;
+
 /**
  * @author Szurovecz János <szjani@szjani.hu>
  */
@@ -39,12 +41,29 @@ interface ObservableTransactionManager extends TransactionManager
     const PRE_ROLLBACK = 'preRollback';
     const POST_ROLLBACK = 'postRollback';
     const ERROR_ROLLBACK = 'errorRollback';
-    
+
     const PRE_TRANSACTIONAL = 'preTransactional';
     const POST_TRANSACTIONAL = 'postTransactional';
     const ERROR_TRANSACTIONAL = 'errorTransactional';
 
+    /**
+     * Attach an observer.
+     *
+     * @param TransactionManagerObserver $observer
+     */
     public function attach(TransactionManagerObserver $observer);
 
+    /**
+     * Detach an observer.
+     *
+     * @param TransactionManagerObserver $observer
+     */
     public function detach(TransactionManagerObserver $observer);
+
+    /**
+     * Check wheter $observer is attached or not.
+     *
+     * @param TransactionManagerObserver $observer
+     */
+    public function contains(TransactionManagerObserver $observer);
 }

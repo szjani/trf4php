@@ -56,6 +56,7 @@ class AbstractObservableTransactionManagerTest extends PHPUnit_Framework_TestCas
             ->expects(self::never())
             ->method('update');
         $this->tm->commit();
+        self::assertFalse($this->tm->contains($this->observer));
 
         $this->observer = $this->getMock(__NAMESPACE__ . '\TransactionManagerObserver');
         $this->observer
@@ -67,6 +68,7 @@ class AbstractObservableTransactionManagerTest extends PHPUnit_Framework_TestCas
             ->method('update')
             ->with($this->tm, ObservableTransactionManager::POST_COMMIT);
         $this->tm->attach($this->observer);
+        self::assertTrue($this->tm->contains($this->observer));
         $this->tm->commit();
     }
 
