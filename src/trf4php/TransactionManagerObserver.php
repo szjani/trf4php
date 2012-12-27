@@ -28,5 +28,5 @@ namespace trf4php;
  */
 interface TransactionManagerObserver
 {
-    public function update(TransactionManager $manager, $event);
+    public function update(ObservableTransactionManager $manager, $event);
 }
