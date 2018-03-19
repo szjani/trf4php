@@ -1,25 +1,5 @@
 <?php
-/*
- * Copyright (c) 2012 Szurovecz János
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
- * of the Software, and to permit persons to whom the Software is furnished to do
- * so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
+declare(strict_types=1);
 
 namespace trf4php;
 
@@ -32,7 +12,7 @@ use SplObjectStorage;
  * Send events before and after method calls.
  * POST_* events are only sent if the method executed without any errors.
  *
- * @author Szurovecz János <szjani@szjani.hu>
+ * @author Janos Szurovecz <szjani@szjani.hu>
  */
 abstract class AbstractObservableTransactionManager implements ObservableTransactionManager
 {
@@ -48,25 +28,25 @@ abstract class AbstractObservableTransactionManager implements ObservableTransac
         return LoggerFactory::getLogger(__CLASS__);
     }
 
-    abstract protected function commitInner();
+    abstract protected function commitInner() : void;
 
-    abstract protected function beginTransactionInner();
+    abstract protected function beginTransactionInner() : void;
 
-    abstract protected function rollbackInner();
+    abstract protected function rollbackInner() : void;
 
-    abstract protected function transactionalInner(Closure $func);
+    abstract protected function transactionalInner(Closure $func) : void;
 
-    public function attach(TransactionManagerObserver $observer)
+    public function attach(TransactionManagerObserver $observer) : void
     {
         $this->observers->attach($observer);
     }
 
-    public function detach(TransactionManagerObserver $observer)
+    public function detach(TransactionManagerObserver $observer) : void
     {
         $this->observers->detach($observer);
     }
 
-    public function contains(TransactionManagerObserver $observer)
+    public function contains(TransactionManagerObserver $observer) : bool
     {
         return $this->observers->contains($observer);
     }
@@ -82,7 +62,7 @@ abstract class AbstractObservableTransactionManager implements ObservableTransac
         }
     }
 
-    final public function beginTransaction()
+    final public function beginTransaction() : void
     {
         $this->notify(self::PRE_BEGIN_TRANSACTION);
         try {
@@ -95,7 +75,7 @@ abstract class AbstractObservableTransactionManager implements ObservableTransac
         $this->notify(self::POST_BEGIN_TRANSACTION);
     }
 
-    final public function commit()
+    final public function commit() : void
     {
         $this->notify(self::PRE_COMMIT);
         try {
@@ -108,7 +88,7 @@ abstract class AbstractObservableTransactionManager implements ObservableTransac
         $this->notify(self::POST_COMMIT);
     }
 
-    final public function rollback()
+    final public function rollback() : void
     {
         $this->notify(self::PRE_ROLLBACK);
         try {
@@ -121,7 +101,7 @@ abstract class AbstractObservableTransactionManager implements ObservableTransac
         $this->notify(self::POST_ROLLBACK);
     }
 
-    final public function transactional(Closure $func)
+    final public function transactional(Closure $func) : void
     {
         $this->notify(self::PRE_TRANSACTIONAL);
         try {
