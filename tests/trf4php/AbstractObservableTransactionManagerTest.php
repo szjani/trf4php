@@ -160,10 +160,14 @@ class AbstractObservableTransactionManagerTest extends TestCase
 
     public function testTransactional()
     {
+        $function = function () {
+            return 1;
+        };
         $this->tm->attach($this->observer);
         $this->tm
             ->expects(self::once())
-            ->method('transactionalInner');
+            ->method('transactionalInner')
+            ->will(self::returnCallback($function));
         $this->observer
             ->expects(self::at(0))
             ->method('update')
@@ -172,10 +176,8 @@ class AbstractObservableTransactionManagerTest extends TestCase
             ->expects(self::at(1))
             ->method('update')
             ->with($this->tm, ObservableTransactionManager::POST_TRANSACTIONAL);
-        $this->tm->transactional(
-            function () {
-            }
-        );
+        $result = $this->tm->transactional($function);
+        self::assertEquals(1, $result);
     }
 
     /**

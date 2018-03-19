@@ -37,8 +37,8 @@ interface TransactionManager
      *
      * @param Closure $func
      * @return mixed The return value of $func
-     * @throws Exception Throwed by $func
+     * @throws Exception Thrown by $func
      * @throws TransactionException
      */
-    public function transactional(Closure $func) : void;
+    public function transactional(Closure $func);
 }

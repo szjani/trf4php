@@ -34,7 +34,7 @@ abstract class AbstractObservableTransactionManager implements ObservableTransac
 
     abstract protected function rollbackInner() : void;
 
-    abstract protected function transactionalInner(Closure $func) : void;
+    abstract protected function transactionalInner(Closure $func);
 
     public function attach(TransactionManagerObserver $observer) : void
     {
@@ -101,16 +101,18 @@ abstract class AbstractObservableTransactionManager implements ObservableTransac
         $this->notify(self::POST_ROLLBACK);
     }
 
-    final public function transactional(Closure $func) : void
+    final public function transactional(Closure $func)
     {
         $this->notify(self::PRE_TRANSACTIONAL);
+        $result = null;
         try {
-            $this->transactionalInner($func);
+            $result = $this->transactionalInner($func);
         } catch (Exception $e) {
             self::getLogger()->error('Error during executing transactional method!', null, $e);
             $this->notify(self::ERROR_TRANSACTIONAL);
             throw $e;
         }
         $this->notify(self::POST_TRANSACTIONAL);
+        return $result;
     }
 }
